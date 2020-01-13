@@ -94,3 +94,7 @@ upgrade: ## update the pip requirements files to use the latest releases satisfy
 	grep "^django==" requirements/edx/base.txt > requirements/edx/django.txt
 	sed '/^[dD]jango==/d' requirements/edx/testing.txt > requirements/edx/testing.tmp
 	mv requirements/edx/testing.tmp requirements/edx/testing.txt
+	# Set custom version of django-oauth-toolkit for tests
+	grep "^django-oauth-toolkit==" requirements/edx/base.txt > requirements/edx/django.txt
+	sed '/^django-oauth-toolkit==/d' requirements/edx/testing.txt > requirements/edx/testing.tmp
+	mv requirements/edx/testing.tmp requirements/edx/testing.txt
