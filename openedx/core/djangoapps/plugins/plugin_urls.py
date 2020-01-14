@@ -14,11 +14,9 @@ def get_patterns(project_type):
     return [
         url(
             url_config.get(constants.PluginURLs.REGEX, r''),
-            include(
-                url_module_path,
-                app_name=url_config.get(constants.PluginURLs.APP_NAME),
-                namespace=url_config[constants.PluginURLs.NAMESPACE],
-            ),
+            include((url_module_path, url_config.get(constants.PluginURLs.APP_NAME)),
+                    namespace=url_config[constants.PluginURLs.NAMESPACE],
+                    )
         )
         for url_module_path, url_config in _iter_plugins(project_type)
     ]
@@ -37,7 +35,9 @@ def _iter_plugins(project_type):
 
         urls_module_path = utils.get_module_path(app_config, url_config, constants.PluginURLs)
         url_config[constants.PluginURLs.NAMESPACE] = url_config.get(constants.PluginURLs.NAMESPACE, app_config.name)
-
+        url_config[constants.PluginURLs.APP_NAME] = app_config.name
+        if url_config[constants.PluginURLs.NAMESPACE].strip() == '':
+            url_config[constants.PluginURLs.APP_NAME] = ''
         log.debug(
             u'Plugin Apps [URLs]: Found %s with namespace %s for %s',
             app_config.name,
